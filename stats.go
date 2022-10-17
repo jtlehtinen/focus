@@ -328,8 +328,7 @@ func (s *Stats) getSessions() error {
 	for _, v := range b {
 		sess := session{}
 
-		if err != nil {
-			err = json.Unmarshal(v, &sess)
+		if err := json.Unmarshal(v, &sess); err != nil {
 			return err
 		}
 
