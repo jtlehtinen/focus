@@ -34,6 +34,10 @@ type countdown struct {
 	s int
 }
 
+func (c countdown) secondsRemaining() int {
+	return c.t*3600 + c.m*60 + c.s
+}
+
 type sessionType string
 
 const (
@@ -669,11 +673,16 @@ func (t *Timer) start(endTime time.Time) error {
 	}
 }
 
+var clockSpinner = []rune("🕛🕚🕙🕘🕗🕖🕕🕔🕓🕒🕑🕐")
+
 // countdown prints the time remaining until the end of
 // the current session.
 func (t *Timer) countdown(timeRemaining countdown) {
+	spinnerIndex := timeRemaining.secondsRemaining() % len(clockSpinner)
+
 	fmt.Printf(
-		"🕒%s:%s",
+		"%c %s:%s",
+		clockSpinner[spinnerIndex],
 		pterm.Yellow(fmt.Sprintf("%02d", timeRemaining.m)),
 		pterm.Yellow(fmt.Sprintf("%02d", timeRemaining.s)),
 	)
